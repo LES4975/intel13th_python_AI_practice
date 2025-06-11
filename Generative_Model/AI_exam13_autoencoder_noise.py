@@ -6,6 +6,7 @@ from keras.datasets import mnist
 
 # 모델 불러 오기
 autoencoder = load_model('./models/autoencoder.h5')
+# autoencoder = load_model('./models/autoencoder_noisy.h5') # 노이즈 낀 데이터로 학습한 모델
 
 # 데이터셋 불러 오기
 (_, _), (x_test, _) = mnist.load_data()
@@ -13,6 +14,7 @@ autoencoder = load_model('./models/autoencoder.h5')
 x_test = x_test[:10] / 255 # 10개만 하자
 
 conv_x_test = x_test.reshape(-1, 28, 28, 1)
+# conv_x_test = np.zeros(shape=(10, 28, 28, 1)) # 입력으로 노이즈만 섞인 이미지를 줘 보자.
 
 noise_factor = 0.5
 conv_x_test_noisy = conv_x_test + np.random.normal(
@@ -26,7 +28,8 @@ plt.figure(figsize=(20, 4))
 # autoencoder에 데이터를 넣어본 결과
 for i in range(n):
     ax = plt.subplot(2, 10, i + 1)
-    plt.imshow(x_test[i])
+    # plt.imshow(x_test[i]) # 깨끗한 x_test
+    plt.imshow(conv_x_test_noisy[i]) # 비교군 - 노이즈가 낀 x_test
     # x축과 y축 선을 비표시
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
